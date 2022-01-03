@@ -5,20 +5,6 @@ using namespace clang;
 using namespace clang::ast_matchers;
 
 namespace {
-bool areSameVariable(const ValueDecl *First, const ValueDecl *Second) {
-  return First && Second &&
-         First->getCanonicalDecl() == Second->getCanonicalDecl();
-}
-
-bool areSameExpr(ASTContext *Context, const Expr *First, const Expr *Second) {
-  if (!First || !Second)
-    return false;
-  llvm::FoldingSetNodeID FirstID, SecondID;
-  First->Profile(FirstID, *Context, true);
-  Second->Profile(SecondID, *Context, true);
-  return FirstID == SecondID;
-}
-
 std::string getName(const CXXRecordDecl &RD) {
   std::string NameWithTemplateArgs;
   llvm::raw_string_ostream OS(NameWithTemplateArgs);
@@ -29,7 +15,7 @@ std::string getName(const CXXRecordDecl &RD) {
 std::string stringRemove(const std::string &S, const std::string &ToRemove) {
   std::string Result;
   size_t Index = 0, Off = 0;
-  while ((Index = S.find(ToRemove, Off)) != -1) {
+  while ((Index = S.find(ToRemove, Off)) != std::string::npos) {
     Result += S.substr(Off, Index - Off);
     Off = Index + ToRemove.length();
   }
@@ -86,7 +72,7 @@ class StateTransitionMapper : public MatchFinder::MatchCallback {
 public:
   StateTransitionMapper(StateTransitionMap &Map) : _StateTransitionMap(Map) {}
 
-  virtual void run(const MatchFinder::MatchResult &Result) {
+  virtual void run(const MatchFinder::MatchResult &Result) override {
     const auto StateDecl = Result.Nodes.getNodeAs<CXXRecordDecl>("state");
     const auto TransCallExpr = Result.Nodes.getNodeAs<CallExpr>("call_expr");
     const auto TransitionFuncDecl =

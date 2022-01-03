@@ -89,10 +89,10 @@ std::string makeFriendlyName(const std::string &Name) {
   // Basically we return the substring starting from the last ':' before the
   // first '<'
   size_t EndIndex = Name.find('<');
-  if (EndIndex == -1)
+  if (EndIndex == std::string::npos)
     EndIndex = Name.size();
   size_t Index = Name.rfind(':', EndIndex - 1);
-  if (Index != -1)
+  if (Index != std::string::npos)
     return Name.substr(Index + 1);
   return Name;
 }
