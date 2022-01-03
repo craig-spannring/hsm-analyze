@@ -45,6 +45,11 @@ int main(int argc, const char **argv) {
                                                     HsmAnalyzeCategory,
                                                     llvm::cl::OneOrMore,
                                                     ToolDescription);
+  if (!ExpectedParser) {
+    // Fail gracefully for unsupported options.
+    llvm::errs() << ExpectedParser.takeError();
+    return 1;
+  }
   CommonOptionsParser& OptionsParser = ExpectedParser.get();
 
   ClangTool Tool(OptionsParser.getCompilations(),
