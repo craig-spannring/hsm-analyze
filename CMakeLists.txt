@@ -1,6 +1,29 @@
 cmake_minimum_required(VERSION 3.4.3)
 project(hsm-analyze)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+if (NOT llvm_config_prog)
+  #set(LLVM_CONFIG_PROG "llvm-config")
+  set(llvm_config_prog "/Users/cts/tmp/installed/bin/llvm-config")
+endif()
+
+if (NOT LLVM_DIR)
+  execute_process(
+    COMMAND ${llvm_config_prog} --cmakedir
+    OUTPUT_VARIABLE LLVM_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+if (NOT Clang_DIR)
+  file(REAL_PATH "${LLVM_DIR}/../clang" Clang_DIR)
+endif()
+
+list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
+list(APPEND CMAKE_MODULE_PATH "${Clang_DIR}")
+
+
 option(USE_STATIC_CRT
 	"Set to ON to link against static CRT (/MT)." OFF)
 
