@@ -34,15 +34,18 @@ static cl::opt<bool> DotLeftRightOrdering(
 
 static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
 
-static void PrintVersion() {
-  outs() << ToolName << " " << ToolVersiona << '\n';
+static void PrintVersion(raw_ostream& raw) {
+    raw << ToolName << " " << ToolVersiona << '\n';
 }
 
 int main(int argc, const char **argv) {
   cl::AddExtraVersionPrinter(PrintVersion);
 
-  CommonOptionsParser OptionsParser(argc, argv, HsmAnalyzeCategory,
-                                    ToolDescription);
+  auto ExpectedParser = CommonOptionsParser::create(argc, argv,
+                                                    HsmAnalyzeCategory,
+                                                    llvm::cl::OneOrMore,
+                                                    ToolDescription);
+  CommonOptionsParser& OptionsParser = ExpectedParser.get();
 
   ClangTool Tool(OptionsParser.getCompilations(),
                  OptionsParser.getSourcePathList());

@@ -16,6 +16,12 @@ if (NOT LLVM_DIR)
     OUTPUT_VARIABLE LLVM_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
+
+execute_process(
+  COMMAND ${llvm_config_prog} --has-rtti
+  OUTPUT_VARIABLE llvm_config_has_rtti
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 if (NOT Clang_DIR)
   file(REAL_PATH "${LLVM_DIR}/../clang" Clang_DIR)
 endif()
@@ -70,4 +76,22 @@ file(GLOB SRC "src/*.cpp" "src/*.h")
 add_executable(hsm-analyze ${SRC})
 
 include_directories(${LLVM_INCLUDE_DIRS})
-target_link_libraries(hsm-analyze PRIVATE clangTooling)
+target_link_libraries(hsm-analyze PRIVATE
+  clangAST
+  clangASTMatchers
+  clangBasic
+  clangFrontend
+  clangSerialization
+  clangTooling)
+
+
+message("rtti ${llvm_config_has_rtti}")
+
+if (NOT ${llvm_config_has_rtti})
+  message("disabling rtti")
+  if(MSVC)
+    target_compile_options(hsm-analyze PRIVATE "/GR-")
+  else()
+    target_compile_options(hsm-analyze PRIVATE "-fno-exceptions" "-fno-rtti")
+  endif()
+endif()

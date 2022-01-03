@@ -19,7 +19,7 @@ std::vector<std::string> splitString(const std::string &S, std::string Sep) {
     return Result;
   size_t Index = 0;
   size_t LastIndex = 0;
-  while ((Index = S.find(Sep, Index)) != -1) {
+  while ((Index = S.find(Sep, Index)) != std::string::npos) {
     Result.push_back(S.substr(LastIndex, Index - LastIndex));
     LastIndex = Index + Sep.size();
     Index = LastIndex + 1;
@@ -50,7 +50,7 @@ std::string getAttributesForTransition(TransitionType TransType) {
   }
 
   std::string Result = FormatString<>(
-      R"(style="%s", weight="%d", color="%s")", Style, Weight, Color);
+      R"(style="%s", weight="%d", color="%s")", Style.c_str(), Weight, Color.c_str()).value();
   return Result;
 }
 
@@ -70,7 +70,7 @@ std::string makeValidDotNodeName(std::string Name) {
 // return StateName.
 std::string getNamespace(const std::string &Name) {
   size_t EndIndex = Name.find('<');
-  if (EndIndex == -1)
+  if (EndIndex == std::string::npos)
     EndIndex = Name.size();
 
   int Index = Name.rfind("::", EndIndex - 1);
@@ -252,7 +252,7 @@ std::string generateDotFileContents(const StateTransitionMap &Map,
                      "  nodesep=0.6;\n"
                      "  %s\n"
                      "",
-                     Options.LeftRightOrdering ? "rankdir=LR" : "");
+                     Options.LeftRightOrdering ? "rankdir=LR" : "").value();
 
   // Write all the graph edges
 
@@ -348,7 +348,7 @@ std::string generateDotFileContents(const StateTransitionMap &Map,
 
       for (const auto &StateName : StateNames) {
         std::string StateAttributes = FormatString<>(
-            R"(label="%s")", makeFriendlyName(StateName).c_str());
+            R"(label="%s")", makeFriendlyName(StateName).c_str()).value();
 
         static bool EnableColor = true;
         if (EnableColor) {
