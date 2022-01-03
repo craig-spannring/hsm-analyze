@@ -5,6 +5,7 @@ hsm-analyze is a tool based on [Clang LibTooling](https://clang.llvm.org/docs/Li
 - Provide useful information about potential problems with a given state machine
 - Output graphs of state machines (e.g. GraphViz dot files)
 
+This version is built to use LLVM/Clang version 13.
 
 ## Usage
 
