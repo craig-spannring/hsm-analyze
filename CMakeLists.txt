@@ -5,20 +5,24 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
-if (NOT llvm_config_prog)
+if (NOT LLVM_CONFIG_PROG)
   #set(LLVM_CONFIG_PROG "llvm-config")
-  set(llvm_config_prog "/Users/cts/tmp/installed/bin/llvm-config")
+  find_program(LLVM_CONFIG_PROG llvm-config)
+  
+  if ("${LLVM_CONFIG_PROG}" STREQUAL "LLVM_CONFIG_PROG-NOTFOUND")
+    set(LLVM_CONFIG_PROG "/Users/cts/tmp/installed/bin/llvm-config")
+  endif()
 endif()
 
 if (NOT LLVM_DIR)
   execute_process(
-    COMMAND ${llvm_config_prog} --cmakedir
+    COMMAND ${LLVM_CONFIG_PROG} --cmakedir
     OUTPUT_VARIABLE LLVM_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
 execute_process(
-  COMMAND ${llvm_config_prog} --has-rtti
+  COMMAND ${LLVM_CONFIG_PROG} --has-rtti
   OUTPUT_VARIABLE llvm_config_has_rtti
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
