@@ -101,16 +101,26 @@ cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_PREFIX_PATH="C:\Program Files\LLV
 ### On Ubuntu
 
 * Install libclang-12-dev package (you might need focal-updates on 20.04)
-* Clone this git repository in you local machine.  (We'll assume you cloned into the directory ~/hsm-analyze
+* Clone this git repository in you local machine.  (We'll assume you cloned into the directory ~/hsm-analyze)
 * run cmake
-'''
+
+```
 cd ~/hsm-analyze
 mkdir build
 cd build
 cmake -DLLVM_CONFIG_PROG=/usr/lib/llvm-12/bin/llvm-config
 make
-'''
+```
 
-### On MacOS
+### On MacOS with XCode
 
-TBD
+* Obtain libclang development libraries (???)
+* * Clone this git repository in you local machine.  (We'll assume you cloned into the directory ~/hsm-analyze)
+* run cmake
+```
+cd ~/hsm-analyze
+mkdir build
+cd build
+cmake -DLLVM_CONFIG_PROG='path to llvm-config' -GXcode
+```
+
