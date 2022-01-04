@@ -5,7 +5,7 @@ hsm-analyze is a tool based on [Clang LibTooling](https://clang.llvm.org/docs/Li
 - Provide useful information about potential problems with a given state machine
 - Output graphs of state machines (e.g. GraphViz dot files)
 
-This version is built to use LLVM/Clang version 13.
+This version is known to work with LLVM version 12 and 13. 
 
 ## Usage
 
@@ -79,7 +79,7 @@ which produces the following png:
 
 ## How to build
 
-On Windows:
+### On Windows:
 
 * Download and install the a binary distribution of [ClangOnWin](https://sourceforge.net/projects/clangonwin/files/MsvcBuild/). **NOTE:** At the time of this writing, hsm-analyze successfully builds with VS2015 and VS2017 against [LLVM-4.0.0svn-r277264-require-python35dll-win64](https://freefr.dl.sourceforge.net/project/clangonwin/MsvcBuild/4.0/LLVM-4.0.0svn-r277264-require-python35dll-win64.exe) and [LLVM-5.0.0svn-r302983-win64](https://ayera.dl.sourceforge.net/project/clangonwin/MsvcBuild/5.0/LLVM-5.0.0svn-r302983-win64.exe).
 
@@ -97,3 +97,20 @@ cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_PREFIX_PATH="C:\Program Files\LLV
 **NOTE:** If the LLVM/Clang libs you want to link against use the MSVC CRT static libraries (rather than DLLs), you can enable the CMake variable ```USE_STATIC_CRT```.
 
 * Open the generated sln and build
+
+### On Ubuntu
+
+* Install libclang-12-dev package (you might need focal-updates on 20.04)
+* Clone this git repository in you local machine.  (We'll assume you cloned into the directory ~/hsm-analyze
+* run cmake
+'''
+cd ~/hsm-analyze
+mkdir build
+cd build
+cmake -DLLVM_CONFIG_PROG=/usr/lib/llvm-12/bin/llvm-config
+make
+'''
+
+### On MacOS
+
+TBD
