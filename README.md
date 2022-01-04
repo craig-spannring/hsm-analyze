@@ -115,7 +115,7 @@ make
 ### On MacOS with XCode
 
 * Obtain libclang development libraries (???)
-* * Clone this git repository in you local machine.  (We'll assume you cloned into the directory ~/hsm-analyze)
+* Clone this git repository in you local machine.  (We'll assume you cloned into the directory ~/hsm-analyze)
 * run cmake
 ```
 cd ~/hsm-analyze
